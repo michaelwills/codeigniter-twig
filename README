@@ -1,0 +1,17 @@
+A basic CodeIgniter library for using the Twig template language
+
+Usage:
+
+	First, Create twig directory under system/cache; and
+	give it write permission
+	
+	$ mkdir system/cache/twig
+	$ chmod o+w system/cache/twig
+
+	Then, Put in your controller,
+
+	$this->load->library('twig');
+
+	$data['title'] = "Testing Twig!!";
+
+	$this->twig->display('view.html', $data);
