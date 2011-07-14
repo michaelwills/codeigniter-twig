@@ -48,3 +48,5 @@ your controller.
 Then in your Twig view call the base_url() function like this
 
     {{ base_url() }}
+
+CI Form functions added from https://github.com/fritze/codeigniter-twig/
