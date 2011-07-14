@@ -9,6 +9,8 @@ class Twig
 
 	/**
 	 * Constructor
+	 * @param bool $debug
+	 * @return Twig
 	 *
 	 */
 	function __construct($debug = false)
@@ -33,6 +35,7 @@ class Twig
                 'cache' => $this->_cache_dir,
                 'debug' => $debug,
 		));
+		$this->_addCIFormMethods();
 	}
 
 	public function add_function($name) 
@@ -46,7 +49,7 @@ class Twig
 		return $template->render($data);
 	}
 
-	public function display($template, $data = array()) 
+	public function displayStats($template, $data = array())
 	{
 		$template = $this->_twig->loadTemplate($template);
 		/* elapsed_time and memory_usage */
@@ -54,5 +57,35 @@ class Twig
 		$memory = (!function_exists('memory_get_usage')) ? '0' : round(memory_get_usage()/1024/1024, 2) . 'MB';
 		$data['memory_usage'] = $memory;
 		$template->display($data);
+	}
+
+	public function display($template, $data = array()) {
+		$templateObj = $this->_twig->loadTemplate($template);
+		$this->CI->output->set_output($templateObj->render($data));
+	}
+
+	/**
+	 * Added CI From methods from
+	 * https://github.com/fritze/codeigniter-twig/blob/master/system/application/libraries/Twig.php
+	 * @return void
+	 */
+	protected function _addCIFormMethods() {
+		$this->_twig->addFunction('form_open', new Twig_Function_Function('form_open'));
+		$this->_twig->addFunction('form_open_multipart', new Twig_Function_Function('form_open_multipart'));
+		$this->_twig->addFunction('form_hidden', new Twig_Function_Function('form_hidden'));
+		$this->_twig->addFunction('form_input', new Twig_Function_Function('form_input'));
+		$this->_twig->addFunction('form_password', new Twig_Function_Function('form_password'));
+		$this->_twig->addFunction('form_upload', new Twig_Function_Function('form_upload'));
+		$this->_twig->addFunction('form_textarea', new Twig_Function_Function('form_textarea'));
+		$this->_twig->addFunction('form_multiselect', new Twig_Function_Function('form_multiselect'));
+		$this->_twig->addFunction('form_fieldset', new Twig_Function_Function('form_fieldset'));
+		$this->_twig->addFunction('form_fieldset_close', new Twig_Function_Function('form_fieldset_close'));
+		$this->_twig->addFunction('form_checkbox', new Twig_Function_Function('form_checkbox'));
+		$this->_twig->addFunction('form_radio', new Twig_Function_Function('form_radio'));
+		$this->_twig->addFunction('form_submit', new Twig_Function_Function('form_submit'));
+		$this->_twig->addFunction('form_label', new Twig_Function_Function('form_label'));
+		$this->_twig->addFunction('form_reset', new Twig_Function_Function('form_reset'));
+		$this->_twig->addFunction('form_button', new Twig_Function_Function('form_button'));
+		$this->_twig->addFunction('form_close', new Twig_Function_Function('form_close'));
 	}
 }
